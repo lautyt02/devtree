@@ -1,0 +1,21 @@
+{
+  "name": "devtree",
+  "version": "1.0.0",
+  "description": "Linktree project That uses React, Tailwind, Express and MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "author": "Lautaro Triviño",
+  "license": "Unlicense",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
