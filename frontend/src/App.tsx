@@ -4,7 +4,7 @@ function App() {
 
   return (
     <>
-      <h1>Devtree Frontend</h1>
+      <h1 className='font-bold text-red'>Devtree Frontend</h1>
     </>
   )
 }
