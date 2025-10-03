@@ -17,7 +17,13 @@ export const Login = () => {
             toast.success(data)
         } catch (error) {
             if (isAxiosError(error) && error.response) {
-                toast.error(error.response.data.error)
+                if(error.response.data.errors){
+                    toast.error("Errores de Validación en el backend. Revise la consola con F12")
+                    console.error(error.response.data.errors)
+                }
+                else{
+                    toast.error(error.response.data.error)
+                }
             }
 
         }
@@ -29,7 +35,7 @@ export const Login = () => {
                 inputAtributes={register("userId", { required: "Email o Nombre de Usuario obligatorio" })}
                 errorMesage={errors.userId && errors.userId.message} />
             {userId && <p className="bg-blue-50 text-blue-600 font-bold text-sm p-3 text-center">
-                {(!!userId.match(/\S+@\S+\.\S+/)) ? "Iniciando Sesión con Email" : "No es un email Valido. Iniciando Sesion con Nombre de Usuario"}</p>}
+                {(!!userId.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) ? "Iniciando Sesión con Email" : "No es un email Válido. Iniciando Sesion con Nombre de Usuario"}</p>}
             <Input label="Contarseña" id="password" type="password" placeholder="Contraseña"
                 inputAtributes={register("password", {
                     required: "La Contraseña es obligatoria"
