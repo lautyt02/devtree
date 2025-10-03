@@ -1,0 +1,1 @@
+export { Autentication } from "./autentication/autentication";
