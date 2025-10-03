@@ -1,33 +1,38 @@
 import { isAxiosError } from "axios"
 import { toast } from "sonner"
-import type { TUser } from "../../../types"
-import { api } from "../../../config"
-import { Title, Input } from "../components"
 import { useForm } from "react-hook-form"
+import { api } from "../../../config"
+import type { TUser } from "../../../types"
+import { Title, Input, AuthForm } from "../components"
 type TFormFields = Pick<TUser, "name" | "email" | "handle"> & {
     password: string,
     'password-confirmation': string
 }
 export const Register = () => {
-    const { register, watch, handleSubmit,reset, formState: { errors } } = useForm<TFormFields>()
+    const { register, watch, handleSubmit, reset, formState: { errors } } = useForm<TFormFields>()
     const password = watch("password")
     const handleRegister = async (formData: TFormFields) => {
+        console.log(formData)
         try {
-            const {data} =await api.post("/auth/register",formData)
+            const { data } = await api.post("/auth/register", formData)
             toast.success(data)
             reset()
         } catch (error) {
-            if(isAxiosError(error)&&error.response){
-                toast.error(error.response.data.error)
+            console.log(error)
+            if (isAxiosError(error) && error.response) {  
+                if(error.response.data.errors){
+                    toast.error("Errores de Validación en el backend. Revise la consola con F12")
+                    console.error(error.response.data.errors)
+                }
+                else{
+                    toast.error(error.response.data.error)
+                }
             }
-            
         }
     }
     return <>
         <Title title="Crear Cuenta" linkTo="/auth/login" linkText="¿Ya tenés una cuenta?. Iniciá Sesión." />
-        <form id="register-form"
-            onSubmit={handleSubmit(handleRegister)}
-            className="bg-white px-5 py-20 rounded-lg space-y-10 mt-10">
+        <AuthForm id="register-form" onSubmit={handleSubmit(handleRegister)} submitValue='Crear Cuenta'>
             <Input label="Nombre" id="name" type="text" placeholder="Tu Nombre"
                 inputAtributes={register("name", { required: "El Nombre es obligatorio" })}
                 errorMesage={errors.name && errors.name.message} />
@@ -36,7 +41,7 @@ export const Register = () => {
                     {
                         required: "El Email es obligatorio",
                         pattern: {
-                            value: /\S+@\S+\.\S+/,
+                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                             message: "email inválido"
                         }
                     })}
@@ -61,11 +66,6 @@ export const Register = () => {
 
                     })}
                 errorMesage={errors["password-confirmation"] && errors["password-confirmation"].message} />
-            <input
-                type="submit"
-                className="bg-cyan-400 p-3 text-lg w-full uppercase text-slate-600 rounded-lg font-bold cursor-pointer"
-                value='Crear Cuenta'
-            />
-        </form>
+        </AuthForm>
     </>
 }
