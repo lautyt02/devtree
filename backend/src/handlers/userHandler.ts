@@ -37,7 +37,7 @@ const login = async (req: Request, res: Response) => {
     }
     //Check Password
     const isPasswordCorrect = await checkPasword(password, user.password)
-    if (!isPasswordCorrect){
+    if (!isPasswordCorrect) {
         const error = new Error("Contraseña incorrecta")
         return res.status(401).json({ error: error.message })
     }
