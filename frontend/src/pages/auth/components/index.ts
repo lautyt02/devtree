@@ -1,2 +1,2 @@
-export { Input } from "./form";
+export { AuthForm ,Input } from "./form";
 export { Title } from "./title/title";
